@@ -1,0 +1,220 @@
+using MySql.Data.MySqlClient;
+
+public class GerenciadorZoo
+{
+    private string connectionString;
+
+    // O construtor recebe a string de conexão quando a classe for instanciada
+    public GerenciadorZoo(string connStr)
+    {
+        connectionString = connStr;
+    }
+
+    public void CadastrarZoo()
+    {
+        Console.Clear();
+        Console.WriteLine("--- CADASTRAR ---");
+        
+        string? nome = LerTexto("Nome: ");
+        
+        string? especie = LerTexto("Especie: ");
+        
+        int idade = LerInteiro("Idade: ");
+    
+        string? habitat = LerTexto("Habitat: ");
+
+        Zoo novoZoo = new Zoo(nome, especie, idade, habitat);
+
+        using MySqlConnection conexao = new MySqlConnection(connectionString);
+        try
+        {
+            conexao.Open();
+            string sql = "INSERT INTO animais (nome, especie, idade, habitat) VALUES (@nome, @especie, @idade, @habitat);";
+            using MySqlCommand cmd = new MySqlCommand(sql, conexao);
+            
+            cmd.Parameters.AddWithValue("@nome", novoZoo.Nome);
+            cmd.Parameters.AddWithValue("@especie", novoZoo.Especie);
+            cmd.Parameters.AddWithValue("@idade", novoZoo.Idade);
+            cmd.Parameters.AddWithValue("@habitat", novoZoo.Habitat);
+            
+            cmd.ExecuteNonQuery();
+            Console.WriteLine("\nZoo cadastrado com sucesso!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro: {ex.Message}");
+        }
+        Console.ReadLine();
+    }
+
+    public void ListarAnimais()
+    {
+        Console.Clear();
+        Console.WriteLine("--- LISTA DE ANIMAIS ---");
+
+        using MySqlConnection conexao = new MySqlConnection(connectionString);
+        try
+        {
+            conexao.Open();
+            string sql = "SELECT id, nome, especie, idade, habitat FROM animais;";
+            using MySqlCommand cmd = new MySqlCommand(sql, conexao);
+            using MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Zoo a = new Zoo();
+                a.Id = reader.GetInt32("id");
+                a.Nome = reader.GetString("nome");
+                a.Especie = reader.GetString("especie");
+                a.Idade = reader.GetInt32("idade");
+                a.Habitat = reader.GetString("habitat");
+
+                Console.WriteLine(a.ToString());
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro: {ex.Message}");
+        }
+        Console.ReadLine();
+    }
+
+    public void BuscarZoo()
+    {
+        Console.Clear();
+        Console.WriteLine("--- BUSCAR Zoo ---");
+        Console.Write("Digite o ID do Zoo: ");
+        int idBusca = int.Parse(Console.ReadLine());
+
+        using MySqlConnection conexao = new MySqlConnection(connectionString);
+        try
+        {
+            conexao.Open();
+            string sql = "SELECT id, nome, especie, idade, habitat FROM animais WHERE id = @id;";
+            using MySqlCommand cmd = new MySqlCommand(sql, conexao);
+            cmd.Parameters.AddWithValue("@id", idBusca);
+            using MySqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.Read())
+            {
+                Zoo a = new Zoo();
+                a.Id = reader.GetInt32("id");
+                a.Nome = reader.GetString("nome");
+                a.Especie = reader.GetString("especie");
+                a.Idade = reader.GetInt32("idade");
+                a.Habitat = reader.GetString("habitat");
+
+                Console.WriteLine("\nRegistro encontrado:");
+                Console.WriteLine(a.ToString());
+            }
+            else
+            {
+                Console.WriteLine("\nZoo não encontrado.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro: {ex.Message}");
+        }
+        Console.ReadLine();
+    }
+
+    public void AtualizarZoo()
+    {
+        Console.Clear();
+        Console.WriteLine("--- ATUALIZAR ---");
+        Console.Write("ID do Zoo a ser atualizado: ");
+        int id = int.Parse(Console.ReadLine());
+        
+        Console.Write("Novo Nome: ");
+        string nome = Console.ReadLine();
+        Console.Write("Nova Espécie: ");
+        string especie = Console.ReadLine();
+        Console.Write("Nova Idade: ");
+        int idade = int.Parse(Console.ReadLine());
+        Console.Write("Novo Habitat: ");
+        string habitat = Console.ReadLine();
+
+        using MySqlConnection conexao = new MySqlConnection(connectionString);
+        try
+        {
+            conexao.Open();
+            string sql = "UPDATE animais SET nome = @nome, especie = @especie, idade = @idade, habitat = @habitat WHERE id = @id;";
+            using MySqlCommand cmd = new MySqlCommand(sql, conexao);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@nome", nome);
+            cmd.Parameters.AddWithValue("@especie", especie);
+            cmd.Parameters.AddWithValue("@idade", idade);
+            cmd.Parameters.AddWithValue("@habitat", habitat);
+
+            int linhas = cmd.ExecuteNonQuery();
+            if (linhas > 0) Console.WriteLine("\nAtualizado com sucesso!");
+            else Console.WriteLine("\nID não encontrado.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro: {ex.Message}");
+        }
+        Console.ReadLine();
+    }
+
+    public void ExcluirZoo()
+    {
+        Console.Clear();
+        Console.WriteLine("--- EXCLUIR ---");
+        Console.Write("ID do Zoo a ser excluído: ");
+        int id = int.Parse(Console.ReadLine());
+
+        using MySqlConnection conexao = new MySqlConnection(connectionString);
+        try
+        {
+            conexao.Open();
+            string sql = "DELETE FROM animais WHERE id = @id;";
+            using MySqlCommand cmd = new MySqlCommand(sql, conexao);
+            cmd.Parameters.AddWithValue("@id", id);
+
+            int linhas = cmd.ExecuteNonQuery();
+            if (linhas > 0) Console.WriteLine("\nExcluído com sucesso!");
+            else Console.WriteLine("\nID não encontrado.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro: {ex.Message}");
+        }
+        Console.ReadLine();
+    }
+
+
+// Método para ler textos garantindo que não sejam nulos nem vazios
+private string LerTexto(string mensagem)
+{
+    string? entrada;
+    do
+    {
+        Console.Write(mensagem);
+        entrada = Console.ReadLine();
+
+        if (string.IsNullOrWhiteSpace(entrada))
+        {
+            Console.WriteLine("Erro: Este campo não pode ficar vazio!");
+        }
+    } while (string.IsNullOrWhiteSpace(entrada));
+
+    return entrada; // Retorna sempre uma string válida (não-nula)
+}
+
+// Método para ler números inteiros sem crashar se digitarem letras
+private int LerInteiro(string mensagem)
+{
+    int numero;
+    Console.Write(mensagem);
+
+    while (!int.TryParse(Console.ReadLine(), out numero))
+    {
+        Console.WriteLine("Erro: Digite um número inteiro válido!");
+        Console.Write(mensagem);
+    }
+
+    return numero;
+}
+}
