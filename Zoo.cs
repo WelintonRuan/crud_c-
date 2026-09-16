@@ -1,13 +1,12 @@
 public class Zoo
 {
-    // Atributos PRIVADOS (Encapsulamento)
+
     private int id;
     private string? nome;
     private string? especie;
     private int idade;
     private string? habitat;
 
-    // Propriedades PÚBLICAS (get e set)
     public int Id
     {
         get { return id; }
@@ -38,10 +37,9 @@ public class Zoo
         set { habitat = value; }
     }
 
-    // Construtor vazio
+ 
     public Zoo() { }
 
-    // Construtor com parâmetros
     public Zoo(string nome, string especie, int idade, string habitat)
     {
         Nome = nome;
@@ -50,7 +48,7 @@ public class Zoo
         Habitat = habitat;
     }
 
-    // Método ToString exigido no trabalho
+
     public override string ToString()
     {
         return $"[{Id}] {Nome} | Espécie: {Especie} | Idade: {Idade} ano(s) | Habitat: {Habitat}";
