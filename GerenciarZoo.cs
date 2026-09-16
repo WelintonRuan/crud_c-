@@ -83,8 +83,7 @@ public class GerenciadorZoo
     {
         Console.Clear();
         Console.WriteLine("--- BUSCAR Zoo ---");
-        Console.Write("Digite o ID do Zoo: ");
-        int idBusca = int.Parse(Console.ReadLine());
+        int idBusca = LerInteiro("Digite o ID do Zoo: ");
 
         using MySqlConnection conexao = new MySqlConnection(connectionString);
         try
@@ -123,17 +122,15 @@ public class GerenciadorZoo
     {
         Console.Clear();
         Console.WriteLine("--- ATUALIZAR ---");
-        Console.Write("ID do Zoo a ser atualizado: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = LerInteiro("ID do Zoo a ser atualizado:");
         
-        Console.Write("Novo Nome: ");
-        string nome = Console.ReadLine();
-        Console.Write("Nova Espécie: ");
-        string especie = Console.ReadLine();
-        Console.Write("Nova Idade: ");
-        int idade = int.Parse(Console.ReadLine());
-        Console.Write("Novo Habitat: ");
-        string habitat = Console.ReadLine();
+        string nome = LerTexto("Novo nome: ");
+        
+        string especie = LerTexto("Nova Espécie: ");
+       
+        int idade = LerInteiro("Nova Idade: ");
+       
+        string habitat = LerTexto("Novo Habitat: ");
 
         using MySqlConnection conexao = new MySqlConnection(connectionString);
         try
@@ -162,8 +159,7 @@ public class GerenciadorZoo
     {
         Console.Clear();
         Console.WriteLine("--- EXCLUIR ---");
-        Console.Write("ID do Zoo a ser excluído: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = LerInteiro("ID do Zoo a ser excluído: ");
 
         using MySqlConnection conexao = new MySqlConnection(connectionString);
         try
