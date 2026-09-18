@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\welinton61309886\\Documents\\trabalho_poo\\crud_c-\\crud_c-.csproj": {}
+    "C:\\Users\\leonardo61863396\\Documents\\GitHub\\crud_c-\\crud_c-.csproj": {}
   },
   "projects": {
-    "C:\\Users\\welinton61309886\\Documents\\trabalho_poo\\crud_c-\\crud_c-.csproj": {
+    "C:\\Users\\leonardo61863396\\Documents\\GitHub\\crud_c-\\crud_c-.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\welinton61309886\\Documents\\trabalho_poo\\crud_c-\\crud_c-.csproj",
+        "projectUniqueName": "C:\\Users\\leonardo61863396\\Documents\\GitHub\\crud_c-\\crud_c-.csproj",
         "projectName": "crud_c-",
-        "projectPath": "C:\\Users\\welinton61309886\\Documents\\trabalho_poo\\crud_c-\\crud_c-.csproj",
-        "packagesPath": "C:\\Users\\welinton61309886\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\welinton61309886\\Documents\\trabalho_poo\\crud_c-\\obj\\",
+        "projectPath": "C:\\Users\\leonardo61863396\\Documents\\GitHub\\crud_c-\\crud_c-.csproj",
+        "packagesPath": "C:\\Users\\leonardo61863396\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\leonardo61863396\\Documents\\GitHub\\crud_c-\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\welinton61309886\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\leonardo61863396\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"

@@ -1,3 +1,4 @@
+using System.Security;
 using MySql.Data.MySqlClient;
 
 public class GerenciadorZoo
@@ -193,6 +194,10 @@ private string LerTexto(string mensagem)
         {
             Console.WriteLine("Erro: Este campo não pode ficar vazio!");
         }
+        else if (verif => char.isLetter(verif) || verif == ' ');
+            {
+                Console.WriteLine("Utilize apenas letras ou espaçamento quando necessário. ");
+            }
     } while (string.IsNullOrWhiteSpace(entrada));
 
     return entrada; 
@@ -204,9 +209,16 @@ private int LerInteiro(string mensagem)
     int numero;
     Console.Write(mensagem);
 
-    while (!int.TryParse(Console.ReadLine(), out numero))
+    while (!int.TryParse(Console.ReadLine(), out numero) || numero < 0)
     {
-        Console.WriteLine("Erro: Digite um número inteiro válido!");
+        if (numero < 0)
+            {
+                Console.WriteLine("O número não pode ser negativo. ");
+            }
+            else
+            {
+                Console.WriteLine("Erro: Digite um número inteiro válido!");  
+            }
         Console.Write(mensagem);
     }
 
