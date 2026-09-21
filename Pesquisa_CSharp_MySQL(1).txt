@@ -1,0 +1,175 @@
+PESQUISA — C# E MYSQL
+
+4. Parte 1 — Pesquisa
+
+Projeto: Sistema de Zoológico
+Banco de dados: MySQL
+Biblioteca utilizada: MySql.Data
+
+4.1 Conexão
+
+1. Como C# realiza uma conexão com um banco de dados?
+
+O C# realiza a conexão com o banco de dados utilizando uma biblioteca/driver específico para o banco escolhido. No projeto foi utilizado o MySql.Data, que permite que o C# se comunique com o MySQL.
+
+No código, a conexão é criada usando MySqlConnection:
+
+using MySqlConnection conexao = new MySqlConnection(connectionString);
+
+Depois, a conexão é aberta com:
+
+conexao.Open();
+
+2. Qual biblioteca/driver é utilizado pelo banco escolhido?
+
+O banco escolhido foi o MySQL e a biblioteca utilizada no projeto é a MySql.Data.
+
+Ela fornece classes como MySqlConnection, MySqlCommand e MySqlDataReader, que são usadas para conectar ao banco, executar comandos SQL e ler resultados.
+
+3. Como essa biblioteca é adicionada ao projeto?
+
+A biblioteca MySql.Data pode ser adicionada pelo NuGet. No terminal, dentro da pasta do projeto, pode ser usado:
+
+dotnet add package MySql.Data
+
+Depois disso, o código pode importar a biblioteca com:
+
+using MySql.Data.MySqlClient;
+
+4. O que é uma string de conexão?
+
+Uma string de conexão é um texto que contém as informações necessárias para o programa conseguir acessar o banco de dados.
+
+No projeto, ela é:
+
+Server=localhost;Database=zoo;Uid=root;Pwd=Senac2026;
+
+5. Quais informações normalmente aparecem em uma string de conexão?
+
+Normalmente aparecem informações como:
+
+- Server: endereço do servidor do banco.
+- Database: nome do banco de dados.
+- Uid: usuário utilizado para acessar o banco.
+- Pwd: senha do usuário.
+
+No projeto:
+
+Server=localhost
+Database=zoo
+Uid=root
+Pwd=Senac2026
+
+
+4.2 Comandos SQL
+
+Os comandos SQL são executados no C# utilizando a classe MySqlCommand.
+
+INSERT
+
+O INSERT é utilizado para adicionar novos dados no banco.
+
+Exemplo do projeto:
+
+string sql = "INSERT INTO animais (nome, especie, idade, habitat) VALUES (@nome, @especie, @idade, @habitat);";
+
+Depois os valores são enviados para os parâmetros e o comando é executado com:
+
+cmd.ExecuteNonQuery();
+
+SELECT
+
+O SELECT é utilizado para consultar dados do banco.
+
+Exemplo:
+
+string sql = "SELECT id, nome, especie, idade, habitat FROM animais;";
+
+Como o SELECT retorna dados, o projeto utiliza ExecuteReader():
+
+using MySqlDataReader reader = cmd.ExecuteReader();
+
+UPDATE
+
+O UPDATE é utilizado para alterar dados que já existem no banco.
+
+Exemplo:
+
+string sql = "UPDATE animais SET nome = @nome, especie = @especie, idade = @idade, habitat = @habitat WHERE id = @id;";
+
+O comando é executado com:
+
+cmd.ExecuteNonQuery();
+
+DELETE
+
+O DELETE é utilizado para excluir dados do banco.
+
+Exemplo:
+
+string sql = "DELETE FROM animais WHERE id = @id;";
+
+Também é executado com:
+
+cmd.ExecuteNonQuery();
+
+
+4.3 Consulta de dados
+
+Como o C# recebe os dados retornados por um SELECT?
+
+Quando um SELECT é executado, o projeto utiliza MySqlDataReader para receber e ler os dados retornados pelo MySQL.
+
+Exemplo:
+
+using MySqlDataReader reader = cmd.ExecuteReader();
+
+Como percorrer os resultados de uma consulta?
+
+Os resultados são percorridos utilizando while junto com reader.Read():
+
+while (reader.Read())
+{
+    // leitura dos dados
+}
+
+Cada vez que Read() é executado, o reader passa para a próxima linha do resultado.
+
+Como transformar os dados retornados pelo banco em objetos de uma classe?
+
+No projeto, cada linha retornada pelo banco é colocada em um objeto da classe Zoo.
+
+Exemplo:
+
+Zoo a = new Zoo();
+
+a.Id = reader.GetInt32("id");
+a.Nome = reader.GetString("nome");
+a.Especie = reader.GetString("especie");
+a.Idade = reader.GetInt32("idade");
+a.Habitat = reader.GetString("habitat");
+
+Assim, os dados que vieram do banco são armazenados nas propriedades do objeto Zoo.
+
+
+4.4 Segurança
+
+O que são parâmetros em comandos SQL e por que eles são importantes?
+
+Parâmetros são espaços reservados dentro do comando SQL que recebem os valores separadamente.
+
+Por exemplo:
+
+string sql = "DELETE FROM animais WHERE id = @id;";
+
+Depois o valor é enviado para o parâmetro:
+
+cmd.Parameters.AddWithValue("@id", id);
+
+Os parâmetros são importantes porque separam o comando SQL dos valores fornecidos pelo usuário. Isso ajuda a evitar SQL Injection e torna a execução das consultas mais segura.
+
+O que pode acontecer quando um sistema monta comandos SQL diretamente utilizando textos digitados pelo usuário?
+
+Quando o sistema coloca diretamente textos digitados pelo usuário dentro do comando SQL, uma pessoa pode inserir comandos SQL no lugar de um valor esperado. Isso pode alterar a consulta original e, dependendo do sistema e das permissões do banco, permitir acesso, alteração ou exclusão de dados que não deveriam ser acessados.
+
+Por isso, o projeto utiliza parâmetros, como @id, @nome, @especie, @idade e @habitat, em vez de juntar diretamente os valores digitados pelo usuário ao texto do SQL.
