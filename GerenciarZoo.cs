@@ -36,7 +36,6 @@ public class GerenciadorZoo
             cmd.Parameters.AddWithValue("@especie", novoZoo.Especie);
             cmd.Parameters.AddWithValue("@idade", novoZoo.Idade);
             cmd.Parameters.AddWithValue("@habitat", novoZoo.Habitat);
-            
             cmd.ExecuteNonQuery();
             Console.WriteLine("\nZoo cadastrado com sucesso!");
         }
@@ -194,13 +193,16 @@ private string LerTexto(string mensagem)
         {
             Console.WriteLine("Erro: Este campo não pode ficar vazio!");
         }
-        else if (verif => char.isLetter(verif) || verif == ' ');
-            {
-                Console.WriteLine("Utilize apenas letras ou espaçamento quando necessário. ");
-            }
+        else if (!entrada.All(c => char.IsLetter(c) || c == ' '))
+        {
+            Console.WriteLine("Utilize apenas letras ou espaçamento quando necessário.");
+
+            entrada = null;
+        }
+
     } while (string.IsNullOrWhiteSpace(entrada));
 
-    return entrada; 
+    return entrada;
 }
 
 
